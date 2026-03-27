@@ -1,13 +1,18 @@
 # Otto Robot GIF Emoji Component
 
-ESP-IDF component that provides **only the gifs folder** with 6 Otto robot GIF emojis for LVGL.
+ESP-IDF component that provides 6 embedded Otto robot GIF emoji resources for LVGL v9.
 
 ## Content
 
-- **gifs/** – 6 GIF files: `staticstate`, `sad`, `happy`, `scare`, `buxue`, `anger`
-- Minimal C API: version, count, and name by index
-
-No embedded C arrays; load GIFs from filesystem or embed them in your project.
+- **Embedded GIF resources**: 6 animated GIF表情 compiled into C arrays
+  - `staticstate` - 静态状态/中性表情
+  - `sad` - 悲伤表情
+  - `happy` - 开心表情
+  - `scare` - 惊吓/惊讶表情
+  - `buxue` - 不学/困惑表情
+  - `anger` - 愤怒表情
+- **C API**: Get resources by name or index
+- **LVGL v9 compatible**: Uses `lv_image_dsc_t` and `LV_IMAGE_DECLARE`
 
 ## Requirements
 
@@ -27,15 +32,40 @@ In code:
 
 ```c
 #include "otto_emoji_gif.h"
+#include "lvgl.h"
 
-// Version and count
-printf("Version: %s, Count: %d\n", otto_emoji_gif_get_version(), otto_emoji_gif_get_count());
+// 方法1: 直接使用声明的GIF资源
+lv_obj_t* gif = lv_gif_create(parent);
+lv_gif_set_src(gif, &happy);  // 设置开心表情
 
-// Get GIF filename by index (0..5)
-const char *name = otto_emoji_gif_get_name(0);  // "staticstate"
+// 方法2: 通过索引获取 (0-5)
+const lv_image_dsc_t* gif_data = otto_emoji_gif_get_by_index(2);  // happy
+if (gif_data) {
+    lv_gif_set_src(gif, gif_data);
+}
+
+// 方法3: 通过名称获取
+const lv_image_dsc_t* gif_data = otto_emoji_gif_get_by_name("anger");
+if (gif_data) {
+    lv_gif_set_src(gif, gif_data);
+}
+
+// 获取信息
+printf("Version: %s\n", otto_emoji_gif_get_version());
+printf("Count: %d\n", otto_emoji_gif_get_count());
+const char* name = otto_emoji_gif_get_name(0);  // "staticstate"
 ```
 
-Copy the **gifs/** folder to your SPIFFS/image partition or embed the GIF files in your app, then use LVGL to open them (e.g. `lv_gif_set_src()` from file path).
+### 索引顺序
+
+| 索引 | 名称 | 描述 |
+|------|------|------|
+| 0 | staticstate | 静态状态/中性表情 |
+| 1 | sad | 悲伤表情 |
+| 2 | happy | 开心表情 |
+| 3 | scare | 惊吓/惊讶表情 |
+| 4 | buxue | 不学/困惑表情 |
+| 5 | anger | 愤怒表情 |
 
 ## Layout
 
@@ -43,17 +73,17 @@ Copy the **gifs/** folder to your SPIFFS/image partition or embed the GIF files 
 otto-emoji-gif-component/
 ├── idf_component.yml
 ├── CMakeLists.txt
-├── gifs/           # only content – 6 GIF files
-│   ├── staticstate.gif
-│   ├── sad.gif
-│   ├── happy.gif
-│   ├── scare.gif
-│   ├── buxue.gif
-│   └── anger.gif
 ├── include/
-│   └── otto_emoji_gif.h
+│   └── otto_emoji_gif.h      # 公共API头文件
 └── src/
-    └── otto_emoji_gif.c
+    ├── otto_emoji_gif.c      # 基本信息
+    ├── otto_emoji_gif_utils.c # 工具函数
+    ├── staticstate.c         # 静态状态GIF数组
+    ├── sad.c                 # 悲伤表情GIF数组
+    ├── happy.c               # 开心表情GIF数组
+    ├── scare.c               # 惊吓表情GIF数组
+    ├── buxue.c               # 不学表情GIF数组
+    └── anger.c               # 愤怒表情GIF数组
 ```
 
 ## License

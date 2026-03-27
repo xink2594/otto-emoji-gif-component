@@ -1,10 +1,18 @@
-# Otto robot GIF emoji component (gifs folder only)
+# Otto robot GIF emoji component
 #
-# This component provides only the gifs folder with 6 GIF files.
-# Use LVGL to load them from filesystem or embed in your project.
+# This component provides embedded GIF emoji resources for LVGL.
 
-# Minimal source for component registration
-set(COMPONENT_SRCS "src/otto_emoji_gif.c")
+# All source files including GIF arrays and utilities
+set(COMPONENT_SRCS
+    "src/otto_emoji_gif.c"
+    "src/otto_emoji_gif_utils.c"
+    "src/staticstate.c"
+    "src/sad.c"
+    "src/happy.c"
+    "src/scare.c"
+    "src/buxue.c"
+    "src/anger.c"
+)
 
 # Register component
 idf_component_register(
@@ -17,4 +25,4 @@ target_compile_definitions(${COMPONENT_LIB}
     PRIVATE OTTO_EMOJI_GIF_VERSION="1.1.0"
 )
 
-message(STATUS "Otto Emoji GIF Component: gifs only at ${CMAKE_CURRENT_SOURCE_DIR}/gifs")
+message(STATUS "Otto Emoji GIF Component: 6 embedded GIF resources loaded")

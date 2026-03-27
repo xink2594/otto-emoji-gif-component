@@ -53,3 +53,19 @@ const lv_image_dsc_t* otto_emoji_gif_get_by_name(const char* name) {
 
     return NULL;  // 未找到
 }
+
+const lv_image_dsc_t* otto_emoji_gif_get_by_index(int index) {
+    if (index < 0 || index >= 6) {
+        return NULL;
+    }
+
+    switch (index) {
+        case 0: return &staticstate;
+        case 1: return &sad;
+        case 2: return &happy;
+        case 3: return &scare;
+        case 4: return &buxue;
+        case 5: return &anger;
+        default: return NULL;
+    }
+}

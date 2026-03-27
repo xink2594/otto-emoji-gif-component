@@ -73,6 +73,14 @@ int otto_emoji_gif_get_count(void);
  */
 const lv_image_dsc_t* otto_emoji_gif_get_by_name(const char* name);
 
+/**
+ * @brief 根据索引获取表情资源
+ * @param index 表情索引 (0-5)
+ * @return 表情资源指针，如果索引无效则返回NULL
+ * @note 索引顺序: 0=staticstate, 1=sad, 2=happy, 3=scare, 4=buxue, 5=anger
+ */
+const lv_image_dsc_t* otto_emoji_gif_get_by_index(int index);
+
 #ifdef __cplusplus
 }
 #endif
